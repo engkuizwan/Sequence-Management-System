@@ -15,7 +15,7 @@
       <table class="table table-bordered table-striped">
         <thead>
         <tr>
-          <th>File Name</th>
+          <th>File Name </th>
           <th>File Type</th>
           <th>Created At</th>
           <th style="text-align: center;">Action</th>
