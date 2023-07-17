@@ -30,9 +30,9 @@ class AuthController extends Controller
     }
 
     public function login(Request $request) {
-        // dd($request->all());
 
         $user = User::where('user_name',$request->user_name)->first();
+        // dd($request->all());
         // dd($user->userID);
         if($user && Hash::check($request->user_password,$user->user_password)){
             $d =Auth::login(User::find($user->userID));

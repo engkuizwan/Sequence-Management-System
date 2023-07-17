@@ -152,7 +152,7 @@
     <!-- Brand Logo -->
     <a href="{{url('/')}}" class="brand-link">
       <img src="{{ asset('asset/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">SEQ-SA</span>
+      <span class="brand-text font-weight-light">SEQSYS</span>
     </a>
 
     <!-- Sidebar -->
@@ -189,17 +189,19 @@
            {{-- LIST SIDE NAVIGATION --}}
            @foreach ($list_navbar as $ln )
             <li class="nav-item">
-              <a href="{{route($ln->route,($ln->require_id == 1?$e_project_id:null))}}" class="nav-link">
+              <a href="{{route($ln->route,($ln->require_id == 1?$e_project_id:null))}}" class="nav-link {{Route::currentRouteName()==$ln->route?'active':''}}">
                 {{-- {{$e_project_id}} --}}
                 <i class="{{$ln->class_icon}}" style="color: #ffffff;"></i>
                 <p>{{$ln->name}}</p>
+                {{-- <p>{{Route::currentRouteName()}}</p>
+                <p>{{$ln->route}}</p> --}}
               </a>
             </li>
            @endforeach
 
            @if (session('role') == 'Admin')
            <li class="nav-item">
-             <a href="{{route('userprofile.create')}}" class="nav-link">
+             <a href="{{route('userprofile.create')}}" class="nav-link {{Route::currentRouteName()=='userprofile.create'?'active':''}}">
                {{-- {{$e_project_id}} --}}
                <i class="fas fa-cash-register" style="color: #ffffff;"></i>
                <p>Register New User</p>
