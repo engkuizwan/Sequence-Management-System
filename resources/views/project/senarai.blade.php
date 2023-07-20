@@ -11,7 +11,7 @@
     <!-- Button trigger modal -->
                     @if (auth()->user()->role->role == 'Admin' || auth()->user()->role->role == 'System Analyst')
                     <div>
-                      <button class="btn btn-success" onClick="create()" style="float:right; margin-bottom:10px;">Add new project</button>
+                      <button class="btn btn-success" onClick="create()" style="float:right; margin-bottom:10px; background-color: #001f3f">Add new project</button>
                     </div>
                     @endif
 

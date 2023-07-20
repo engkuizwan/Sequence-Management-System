@@ -181,10 +181,10 @@ class FlowController extends Controller
          $d['edit'] = 1;
          $d['flow'] = $flow = Flow::find($id);
         $test = json_decode($flow->all_id);
-         dd($test);
-         foreach($test as $item ){
-            dd($item["type"]);
-         }
+        //  dd($test);
+        //  foreach($test as $item ){
+        //     dd($item["type"]);
+        //  }
          $modul_id = $flow->modul_id;
          $modul = Modul::where('modul_id', $modul_id)->get();
          $project_id = $modul[0]->project_id;

@@ -79,7 +79,7 @@
     
             @forelse ($user as $item )
             <tr>
-                <td><a href="{{route('show_profile',$item->userID)}}">{{$item->name}}</a></td>
+                <td><a href="{{route('show_user_profile',$item->userID)}}">{{$item->name}}</a></td>
                 <td>{{$item->user_name}}</td>
                 <td>{{$item->role}}</td>
                 <td>{{is_int($item->created_at)?  date('d-m-Y',$item->created_at) : date('d-m-Y',strtotime($item->created_at))}}</td>

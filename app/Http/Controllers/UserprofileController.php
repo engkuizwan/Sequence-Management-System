@@ -93,7 +93,7 @@ class UserprofileController extends Controller
      public function profile(){
         $user_id = auth()->user()->userID;
         $d['user'] = User::find($user_id);
-        $d['role'] = User::find($user_id)->role;
+        $d['role'] = (User::find($user_id)->role)->role;
         // dd($d['role']);
         $d['project_status'] = assetlookup::where('category','project_status')->get();
         $d['project'] = User::find($user_id)->project($user_id);
@@ -115,9 +115,22 @@ class UserprofileController extends Controller
         $d['project_status'] = assetlookup::where('category','project_status')->get();
         $d['project'] = User::find($user_id)->project($user_id);
         $d['role'] = User::find($user_id)->role1($user_id);
-        // dd($d['project']);
+        dd($d['role']);
         $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
         return view('userprofile.profile', $d);
+    }
+
+    public function show_user_profile($user_id){
+        // dd('test');
+        // $user_id = $user_id;
+        $d['user'] = User::find($user_id);
+        $d['project_status'] = assetlookup::where('category','project_status')->get();
+        $d['project'] = User::find($user_id)->project($user_id);
+        $d['role'] = User::find($user_id)->role1($user_id);
+        $d['all_role'] = Role::all();
+        // dd($d['role']);
+        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
+        return view('userprofile.profile_view_admin', $d);
     }
 
     /**
@@ -184,6 +197,27 @@ class UserprofileController extends Controller
         }
     }
 
+
+    public function update_status($user_id)
+    {
+
+        try{
+            $user = User::find($user_id);
+            if($user->status == 1){
+                $user->status = 0;
+            }else{
+                $user->status = 1;
+            }
+
+            // dd($user);
+            $user->save();
+            return redirect(route('show_user_profile',$user_id))->withSuccess('User Details Updated');
+        }catch(\Throwable $th){
+            // dd($th);
+            return back()->withError('Something when wrong!');
+        }
+    }
+
     public function saveToken(Request $request)
     {
         // dd($request->all());
@@ -213,6 +247,7 @@ class UserprofileController extends Controller
                 "body" => $body,
                 "content_available" => true,
                 "priority" => "high",
+                "icon"=> asset('images.png')
             ]
         ];
         $dataString = json_encode($data);

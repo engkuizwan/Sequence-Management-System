@@ -198,6 +198,7 @@ class FunctionController extends Controller
                 "body" => $body,
                 "content_available" => true,
                 "priority" => "high",
+                "icon"=> asset('alert.png')
             ]
         ];
         $dataString = json_encode($data);

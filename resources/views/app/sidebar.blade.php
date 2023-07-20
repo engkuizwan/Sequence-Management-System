@@ -1,47 +1,3 @@
-
-{{-- @php
-    use App\Models\MasterGrantMonitoring;
-@endphp --}}
-<!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
-     <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      {{-- <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('/') }}" class="nav-link">Home</a>
-      </li> --}}
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-
-      {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li> --}}
-      
-      {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li> --}}
-      
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" role="button">
-          <i class="fas fa-sign-out-alt"></i>
-      </a>
-      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-          @csrf
-      </form>
-    </ul> 
-    
-  </li>
-  </nav>
-  <!-- /.navbar -->
-
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -55,16 +11,10 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel pb-3 mb-3 d-flex">
         <div class="info">
-          <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-              <li class="nav-item">
                 <a href="{{route('profile')}}"  class="nav-link {{Route::currentRouteName()=='profile'?'active':''}}" style="background-color: {{Route::currentRouteName()=='profile'?'#001f3f':''}} ">
                   {{auth()->user()->user_name}}
                   <br><small style="color: #ffffff">{{auth()->user()->role->role}}</small>
                 </a>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
 
@@ -82,7 +32,7 @@
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
@@ -108,22 +58,6 @@
              </a>
            </li>
            @endif
-
-          {{-- <li class="nav-item">
-            <a href="{{route('project.admin')}}" class="nav-link">
-              <i class="fa fa-briefcase" style="color: #ffffff;"></i>
-              <p>PROJECT</p>
-            </a>
-          </li> --}}
-
-          {{-- ************************************** --}}
-
-          {{-- <li class="nav-item">
-            <a href="{{url('/')}}" class="nav-link">
-              <i class="fa fa-users" aria-hidden="true" style="color: #ffffff;"></i>
-              <p>TEAM</p>
-            </a>
-          </li> --}}
 
 
 

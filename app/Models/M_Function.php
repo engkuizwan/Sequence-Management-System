@@ -34,7 +34,7 @@ class M_Function extends Model
 
     public static function getFunc($functionID){
         $sql = DB::table('function as f')
-                ->leftJoin('users as u', 'f.userID', '=', 'u.id')
+                ->leftJoin('user as u', 'f.userID', '=', 'u.userID')
                 ->leftJoin('file as f2', 'f.file_ID', '=', 'f2.file_ID')
                 ->select('f.functionID', 'f.function_name' , 'f.functionDesc' , 'u.name' , 'f2.file_ID' , 'f2.file_name' , 'f.created_at' )
                 ->where('f.functionID', '=', $functionID)

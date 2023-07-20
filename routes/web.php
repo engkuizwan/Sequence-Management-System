@@ -42,8 +42,10 @@ Route::middleware(['auth'])->group(function(){
         // ****************************************************  U S E R  P R O F I L E ************************************************
         Route::resource('/userprofile', UserprofileController::class);
         Route::post('/update_user/{user_id}', [UserprofileController::class, 'update_user'])->name('update_user');
+        Route::get('/update_status/{user_id}', [UserprofileController::class, 'update_status'])->name('update_status');
         Route::get('/profile', [UserprofileController::class, 'profile'])->name('profile');
         Route::get('/show_profile/{user_id}', [UserprofileController::class, 'show_profile'])->name('show_profile');
+        Route::get('/show_user_profile/{user_id}', [UserprofileController::class, 'show_user_profile'])->name('show_user_profile');
         Route::post('/save-token', [UserprofileController::class, 'saveToken'])->name('save-token');
         Route::post('/send-notification', [UserprofileController::class, 'sendNotification'])->name('send.notification');
         // Route::post('/register', [UserprofileController::class,'create'])->name('register');

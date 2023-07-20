@@ -1,6 +1,6 @@
 @extends('app.layout')
 @section('page-header')
-    <h1 class=" mb-2 text-gray-800">User Profile</h1>
+    {{-- <h1 class=" mb-2 text-gray-800">User Profile</h1> --}}
 @endsection
 @section('content')
 <div class="row mt-1">
@@ -15,7 +15,7 @@
                         
                     <div>
                         <div style="min-width: 100%" class="mb-4">
-                            <span class="badge badge-{{$user->status == 1?'success':'danger'}}" style="margin-left: 55%" >{{$user->status == 1?'Active':'Resigned'}}</span>
+                            <a style="margin-left: 55%" type="button" href="{{route('update_status', $user->userID)}}"><span class="badge badge-{{$user->status == 1?'success':'danger'}}"  >{{$user->status == 1?'On Duty':'Resigned'}}</span></a>
                             <div class="text-center mb-1">
                                 <div class="image">
                                     <img src="{{ asset('AdminLTE-3.2.0/dist/img/user-default-160x160.png') }}" class="img-circle elevation-2" alt="User Image">
@@ -37,60 +37,48 @@
                                     <div class="col-md-1"></div>
                                     <label class="control-label col-md-3"><b>Name</b></label>
                                     <label class="col-sm-1 control-label">:</label>
-                                    <input type="text" name="name" value="{{$user->name}}"class="form-control control-label col-md-7">
+                                    <input  type="text" name="name" value="{{$user->name}}"class="form-control control-label col-md-7">
                                     {{-- <label class="control-label col-md-7 text-secondary"><b>{{ $user->name }}</b></label> --}}
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-1"></div>
                                     <label class="control-label col-md-3"><b>User Name</b></label>
                                     <label class="col-sm-1 control-label">:</label>
-                                    <input type="text" name="user_name" value="{{$user->user_name}}"class="form-control control-label col-md-7">
-                                    {{-- <label class="control-label col-md-7 text-secondary"><b>{{ $user->name }}</b></label> --}}
+                                    <input  type="text" name="user_name" value="{{$user->user_name}}"class="form-control control-label col-md-7">
+                                    {{-- <label class="control-label col-md-7 text-secondary"><b>{{ $user->user_name }}</b></label> --}}
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-1"></div>
                                     <label class="control-label col-md-3"><b>Emel</b></label>
                                     <label class="col-sm-1 control-label">:</label>
-                                    <input type="text" name="user_email" value="{{$user->user_email}}"class="form-control control-label col-md-7">
+                                    <input  type="text" name="user_email" value="{{$user->user_email}}"class="form-control control-label col-md-7">
                                     {{-- <label class="control-label col-md-7 text-secondary"><b>{{ $user->user_email }}</b></label> --}}
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-1"></div>
                                     <label class="control-label col-md-3"><b>Role</b></label>
                                     <label class="col-sm-1 control-label">:</label>
-                                    {{-- <input type="text" name="role" value="{{$role->role}}"class="form-control control-label col-md-7"> --}}
-                                    <label class="control-label col-md-7 text-secondary"><b>{{  $role }}</b></label>
+                                    {{-- <input type="text" name="role" value="{{$role}}"class="form-control control-label col-md-7"> --}}
+                                    <select class="form-control control-label col-md-7" name="" id="">
+                                        @foreach ($all_role as $ar)
+                                            <option {{$role == $ar->role?'selected':''}} value="{{$ar->role_id}}">{{$ar->role}}</option>
+                                        @endforeach
+                                        <option value=""></option>
+                                    </select>
+                                    {{-- <label class="control-label col-md-7 text-secondary"><b>{{  $role }}</b></label> --}}
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <div class="col-md-1"></div>
-                                    <label class="control-label col-md-3"><b>Password</b></label>
-                                    <label class="col-sm-1 control-label">:</label>
-                                    <input type="text" name="user_password" class="form-control control-label col-md-7">
-                                    {{-- <label class="control-label col-md-7 text-secondary"><b>{{ $role }}</b></label> --}}
-                                </div>
-                                <div class="form-group row">
                                     <div class="col-md-7">
-
                                     </div>
                                     <div class="col-md-5">
                                         <ul class="list-inline">
-
                                             <li class="list-inline-item">
-                                                <button style="margin-left: 20px;"  type="submit" class="btn btn-warning btn-sm buttonsaveajax ">Update</button>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a onclick="initFirebaseMessagingRegistration()"  type="submit" class="btn btn-info btn-sm "><i class="fas fa-coins"></i></a>
-                                            </li>
-                                        </form>
-                                            <li class="list-inline-item">
-                                                <form action="{{route('send.notification')}}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-info btn-sm buttonsaveajax2 ">Test Notification</button>
-                                                </form>
+                                                <button style="margin-left: 130px;"  type="submit" class="btn btn-warning btn-sm buttonsaveajax ">Update</button>
                                             </li>
                                         </ul>
                                     </div>
+                                </form>
                                 </div>
                             {{-- </div> --}}
                         {{-- </div> --}}

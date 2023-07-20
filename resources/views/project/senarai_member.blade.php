@@ -18,7 +18,7 @@
         </div>
         <div class="card-body">
           @if (auth()->user()->role->role == 'Admin' || auth()->user()->role->role == 'System Analyst')
-          <button class="btn btn-success float-right" onclick="addmembers({{$project_id}})">Add Members</button>            
+          <button class="btn btn-dark float-right" onclick="addmembers({{$project_id}})">Add Members</button>            
           @endif
           <table id="" class="table table-bordered table-striped">
             <thead>

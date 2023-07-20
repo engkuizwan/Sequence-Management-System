@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
       @if (auth()->user()->role->role == 'Admin' || auth()->user()->role->role == 'Developer')
-      <button class="btn btn-success float-right" onclick="createmodul({{$project_id}})">Add New Modul</button>
+      <button class="btn btn-dark float-right" onclick="createmodul({{$project_id}})">Add New Modul</button>
       @endif
       <table class="table table-bordered table-striped">
         <thead>
