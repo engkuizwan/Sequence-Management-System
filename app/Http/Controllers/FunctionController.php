@@ -15,18 +15,27 @@ class FunctionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($fileid="")
+    public function index($fileid="",$e_project_id)
     {
+        $d['e_project_id']=$e_project_id;
         $d['file_id'] = $file_id = decrypt($fileid);
         $d['functionList'] = M_Function::getAllFunc($file_id);
         $file = File::where(['file_id' => $file_id])->first();
+        // dd($file);
 
-        $list = array(1);
+        $list = array(1,5,2,3,4);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         // $d['funcName'] = $file->file_name;
         // $d['title'] = "File " . $file->file_name;
-
-        return view('function.senarai', $d);
+        if($file->file_type == 'View'){
+            $d['user'] = User::all()->pluck('name', 'userID');
+            $d['file'] = $file = File::where(['file_id' => $file_id])->first();
+            $d['funcDetail'] = M_Function::getview($file_id);
+            // dd($d['funcDetail']);
+            return view('function.create_view', $d);
+        }else{
+            return view('function.senarai', $d);
+        }
     }
 
     /**
@@ -34,9 +43,10 @@ class FunctionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($file_id, $e_project_id)
     {
-        $file_id = decrypt($_GET['id']);
+        $file_id = decrypt($file_id);
+        $d['e_project_id']=$e_project_id;
         $d['file'] = File::where(['file_id' => $file_id])->first();
         $d['user'] = User::all()->pluck('name', 'userID');
         // dd($d['user']);
@@ -54,10 +64,12 @@ class FunctionController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validate = $request->validate([
             'func_name'=>'required',
             'func_desc'=>'required',
             'user'=>'required',
+            'source_code'=>'required',
             // 'role'=>'required',
             'file'=>'nullable',
             //'user_password'=>'required',
@@ -65,6 +77,7 @@ class FunctionController extends Controller
             'func_name.required'=>' Function Name is required',
             'func_desc.required'=>' Function Description is required',
             'user.required'=>'User Name is required',
+            'source_code.required'=>'Source Code is required',
             // 'role.required'=>'Role is required',
             // 'file.required'=>'required',
             //'user_password.required'=>'required',
@@ -78,11 +91,51 @@ class FunctionController extends Controller
                 'userID' => $request->user,
                 // 'roleID'=>$request->role,
                 'file_ID' => $request->file,
+                'source_code' => $request->source_code,
                 //'user_password'=> Hash::make($request->user_password),
             ];
             $sql = M_Function::insert($data);
-            return redirect(route('functionindex', encrypt($file_id)))->withSucces('Berjaya Kemaskini');
+            return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Berjaya Kemaskini');
         }catch(\Throwable $th){
+            dd($th);
+            return back()->withError('Something when wrong!');
+        }
+    }
+
+    
+    public function store_view(Request $request)
+    {
+        // dd($request->all());
+        $validate = $request->validate([
+            'func_desc'=>'required',
+            'user'=>'required',
+            'source_code'=>'required',
+            // 'role'=>'required',
+            'file'=>'nullable',
+            //'user_password'=>'required',
+        ],[
+            'func_desc.required'=>' Function Description is required',
+            'user.required'=>'User Name is required',
+            'source_code.required'=>'Source Code is required',
+            // 'role.required'=>'Role is required',
+            // 'file.required'=>'required',
+            //'user_password.required'=>'required',
+        ]);
+
+        try{
+            $file_id = $request->file;
+            $data=[
+                'functionDesc' => $request->func_desc,
+                'userID' => $request->user,
+                // 'roleID'=>$request->role,
+                'file_ID' => $request->file,
+                'source_code' => $request->source_code,
+                //'user_password'=> Hash::make($request->user_password),
+            ];
+            $sql = M_Function::insert($data);
+            return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('View Detail Inserted');
+        }catch(\Throwable $th){
+            dd($th);
             return back()->withError('Something when wrong!');
         }
     }
@@ -110,9 +163,11 @@ class FunctionController extends Controller
      * @param  \App\Models\Function  $function
      * @return \Illuminate\Http\Response
      */
-    public function edit($function)
+    public function edit($function, $e_project_id)
     {
         $d['funcDetail'] = M_Function::getFunc($function);
+        $d['e_project_id'] = $e_project_id;
+        // dd($d['funcDetail']);
         $d['user'] = User::all()->pluck('name', 'userID');
         $list = array(1);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
@@ -131,16 +186,20 @@ class FunctionController extends Controller
     {
         $validate = $request->validate([
             'func_name'=>'required',
-            'func_desc' => 'required',
+            'func_desc'=>'required',
             'user'=>'required',
+            'source_code'=>'required',
             // 'role'=>'required',
             'file'=>'nullable',
+            //'user_password'=>'required',
         ],[
             'func_name.required'=>' Function Name is required',
             'func_desc.required'=>' Function Description is required',
             'user.required'=>'User Name is required',
+            'source_code.required'=>'Source Code is required',
             // 'role.required'=>'Role is required',
             // 'file.required'=>'required',
+            //'user_password.required'=>'required',
         ]);
 
         try{
@@ -156,7 +215,58 @@ class FunctionController extends Controller
             $title = 'Function Changed!';
             $body = $user->user_name.' just now update your function';
             $this->sendNotification($request->user, $title, $body);
-            return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
+            return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
+            // return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
+        }catch(\Throwable $th){
+            return back()->withError('Something when wrong!');
+            
+        }
+    }
+
+
+
+    public function update_view(Request $request)
+    {
+        // dd($request->all());
+        $validate = $request->validate([
+            'func_desc'=>'required',
+            'user'=>'required',
+            'source_code'=>'required',
+            // 'role'=>'required',
+            'file'=>'nullable',
+            //'user_password'=>'required',
+        ],[
+            'func_desc.required'=>' Function Description is required',
+            'user.required'=>'User Name is required',
+            'source_code.required'=>'Source Code is required',
+            // 'role.required'=>'Role is required',
+            // 'file.required'=>'required',
+            //'user_password.required'=>'required',
+        ]);
+
+        try{
+            $file_id = $request->file;
+            $data=[
+                'function_name' => $request->func_name,
+                'functionDesc' => $request->func_desc,
+                'userID'=>$request->user
+                // 'file_ID'=>$request->file,
+            ];
+            $sql = M_Function::where('functionID',$request->function_id)->update($data);
+
+
+            //****************send_notification*************** */
+            $func_detail= M_Function::getview($file_id);
+            if(auth()->user()->userID != $func_detail->userID){
+                $user =  User::find(auth()->user()->userID);
+                $title = 'Function Changed!';
+                $body = $user->user_name.' just now update your function';
+                $this->sendNotification($request->user, $title, $body);
+            }
+
+
+
+            return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
         }catch(\Throwable $th){
             return back()->withError('Something when wrong!');
             
@@ -169,11 +279,14 @@ class FunctionController extends Controller
      * @param  \App\Models\Function  $function
      * @return \Illuminate\Http\Response
      */
-    public function destroy(M_Function $function)
+    public function destroy(Request $request, M_Function $function)
     {
-        $file_id = $_POST['function_id'];
+        // dd($request->all());
+        $file_id = $request->file_id;
+        $e_project_id = $request->e_project_id;
         try {
             $function->delete();
+            return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $e_project_id]))->withSucces('Function Deleted');
             return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function Deleted');
         } catch (\Throwable $th) {
             //throw $th;
@@ -221,5 +334,40 @@ class FunctionController extends Controller
 
         // dd($response);
         // return redirect(route('profile'));
+    }
+
+    public function getfunction($file_id){
+
+        $all_function = M_Function::where('file_ID',$file_id)->get();
+        // dd($all_function);
+        return response()->json([
+            'data_function' => $all_function
+        ]);
+
+    }
+
+    
+    public function getfunction_detail($function_id){
+
+        $function = M_Function::where('function.functionID',$function_id)
+        ->join('file as f', 'function.file_ID','=','f.file_ID')
+        ->first();
+        // dd($all_function);
+        return response()->json([
+            'data_function' => $function
+        ]);
+
+    }
+    
+    public function getfunction_detail_byfile($file_id){
+
+        $function = M_Function::where('function.file_ID',$file_id)
+        ->join('file as f', 'function.file_ID','=','f.file_ID')
+        ->first();
+        // dd($all_function);
+        return response()->json([
+            'data_function' => $function
+        ]);
+
     }
 }

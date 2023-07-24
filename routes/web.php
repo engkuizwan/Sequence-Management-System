@@ -105,8 +105,15 @@ Route::middleware(['auth'])->group(function(){
 
         // **************************************************** F  U  N  C  T  I  O  N  S ************************************************
         Route::resource('/function', FunctionController::class);
-        Route::get('/functionindex/{fileId}', [FunctionController::class, 'index'])->name('functionindex');
-        Route::get('/functionShow/{functionId}', [FunctionController::class, 'show'])->name('functionShow');
+        Route::get('/functionindex/{fileId}/{e_project_id}', [FunctionController::class, 'index'])->name('functionindex');
+        Route::get('/functionShow/{functionId}/{e_project_id}', [FunctionController::class, 'show'])->name('functionShow');
+        Route::get('/functionEdit/{functionId}/{e_project_id}', [FunctionController::class, 'edit'])->name('functionEdit');
+        Route::post('/functionShow/create_view', [FunctionController::class, 'store_view'])->name('store_view');
+        Route::post('/functionShow/update_view', [FunctionController::class, 'update_view'])->name('update_view');
+        Route::get('/functioncreate/create/{file_id}/{e_project_id}', [FunctionController::class, 'create'])->name('functioncreate');
+        Route::get('/getfunction/{file_id}', [FunctionController::class, 'getfunction'])->name('getfunction');
+        Route::get('/getfunction_detail/{function_id}', [FunctionController::class, 'getfunction_detail'])->name('getfunction_detail');
+        Route::get('/getfunction_detail_byfile/{file_id}', [FunctionController::class, 'getfunction_detail_byfile'])->name('getfunction_detail_byfile');
 
         // Auth::routes();
 

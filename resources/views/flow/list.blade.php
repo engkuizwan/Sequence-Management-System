@@ -39,12 +39,14 @@
       </div>
   </div>
 </div>
+
+
 <div class="card">
   <div class="card-header">
     <h3 class="card-title">Flow</h3>
   </div>
   <div class="card-body">
-    @if (auth()->user()->role == 'Admin' || auth()->user()->role->role == 'Developer')
+    @if (auth()->user()->role->role == 'Admin' || auth()->user()->role->role == 'Developer')
     <button class="btn btn-info float-right" onclick="createflow({{$modul_id}})">Add New Flow</button>
     @endif
     <table id="example1" class="table table-bordered table-striped">

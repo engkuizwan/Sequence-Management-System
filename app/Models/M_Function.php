@@ -27,7 +27,7 @@ class M_Function extends Model
                 ->select('f.functionID', 'f.function_name' , 'f.functionDesc' , 'u.name' , 'f2.file_name' , 'f.created_at' )
                 ->where('f.file_ID', '=', $fileID)
                 ->where('f.deleted_at')
-                ->get();
+                ->paginate(5);
 
         return $sql;
     }
@@ -36,8 +36,19 @@ class M_Function extends Model
         $sql = DB::table('function as f')
                 ->leftJoin('user as u', 'f.userID', '=', 'u.userID')
                 ->leftJoin('file as f2', 'f.file_ID', '=', 'f2.file_ID')
-                ->select('f.functionID', 'f.function_name' , 'f.functionDesc' , 'u.name' , 'f2.file_ID' , 'f2.file_name' , 'f.created_at' )
+                ->select('f.functionID', 'f.function_name' , 'f.functionDesc' , 'u.name' , 'f2.file_ID' , 'f2.file_name' , 'f.created_at', 'f.source_code' )
                 ->where('f.functionID', '=', $functionID)
+                ->first();
+
+        return $sql;
+    }
+
+    public static function getview($file_id){
+        $sql = DB::table('function as f')
+                ->leftJoin('user as u', 'f.userID', '=', 'u.userID')
+                ->leftJoin('file as f2', 'f.file_ID', '=', 'f2.file_ID')
+                ->select('f.functionID', 'f.function_name' , 'f.functionDesc' , 'u.name' , 'f2.file_ID' , 'f2.file_name' , 'f.created_at', 'f.source_code', 'f.userID' )
+                ->where('f2.file_ID', '=', $file_id)
                 ->first();
 
         return $sql;

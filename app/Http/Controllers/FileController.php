@@ -19,7 +19,10 @@ class FileController extends Controller
         //
         $d['e_project_id']=$e_projectId;
         $d['project_id']=$projectId = decrypt($e_projectId);
-        $d['file'] = File::filter($projectId)->paginate(5);
+        $d['file'] = File::filter($projectId)
+        ->orderby('file.created_at','ASC')
+        ->paginate(5);
+        // dd($d['file']);
         $list = array(1,5,2,3,4);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         return view('file.senarai',$d);

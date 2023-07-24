@@ -40,7 +40,7 @@
            @foreach ($list_navbar as $ln )
             <li class="nav-item">
               <a href="{{route($ln->route,($ln->require_id == 1?$e_project_id:null))}}" class="nav-link {{Route::currentRouteName()==$ln->route?'active':''}}" style="background-color: {{Route::currentRouteName()==$ln->route?'#001f3f':''}} ">
-                {{-- {{$e_project_id}} --}}
+                
                 <i class="{{$ln->class_icon}}" style="color: #ffffff;"></i>
                 <p>{{$ln->name}}</p>
                 {{-- <p>{{Route::currentRouteName()}}</p>

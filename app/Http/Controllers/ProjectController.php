@@ -57,7 +57,7 @@ class ProjectController extends Controller
         
         $role =auth()->user()->role;
         if($role == 'Admin'){
-            $data['model'] = User::all()->withoutTrashed();
+            $data['model'] = User::all()->withoutTrashed()->paginate(5);
         }else{
             $data['model'] = $user->project(auth()->user()->userID);
         }

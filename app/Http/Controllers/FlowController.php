@@ -39,6 +39,8 @@ class FlowController extends Controller
         //     dd('test');
         // }
 
+        // dd(auth()->user()->role->role == 'Admin');
+
         $d['flow'] = Flow::where('flow.modul_id',$modul_id)
         ->filter(['flow.flow_name'=>$flow_name,'flow.flow_owner'=>$flow_owner])
         ->join('user','flow.user_id_owner' ,'=', 'user.userID')
@@ -99,7 +101,7 @@ class FlowController extends Controller
         $d['model'] = File::where(['file_type'=>'model', 'projectID'=>$project_id])->get();
         $d['helper'] = File::where(['file_type'=>'helper', 'projectID'=>$project_id])->get();
         // dd($t);
-        return view('flow.form', $d);
+        return view('flow.form2', $d);
     }
 
     /**

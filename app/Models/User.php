@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne('App\Models\role','role_id', 'role_id');
+        return $this->hasOne('App\Models\Role','role_id', 'role_id');
     }
 
     public function role1($userid)
@@ -79,7 +79,7 @@ class User extends Authenticatable
     
     public function project($userid)
     {
-        $data = $this::select('project.projectID','project.project_name','project.project_framework','project.project_description','project.status','project_user.created_at')->where('user.userID',$userid)->join('project_user','user.userID','=','project_user.userID')->join('project','project_user.projectID','=','project.projectID')->whereNull('project.deleted_at')->get();
+        $data = $this::select('project.projectID','project.project_name','project.project_framework','project.project_description','project.status','project_user.created_at')->where('user.userID',$userid)->join('project_user','user.userID','=','project_user.userID')->join('project','project_user.projectID','=','project.projectID')->whereNull('project.deleted_at')->paginate(5);
         return $data;
     }
 
