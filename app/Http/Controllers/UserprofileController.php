@@ -158,7 +158,7 @@ class UserprofileController extends Controller
     public function update_user(Request $request, $userprofile)
     {
         //dd
-        dd($request->all());
+        // dd($request->all());
         $validate = $request->validate([
             'name'=>'required',
             'user_email'=>'required',
