@@ -1,5 +1,9 @@
 
 
+@php
+use App\Models\File;
+use App\Models\M_function;
+@endphp
     <style>
 
         #add_button{
@@ -52,29 +56,38 @@
                     </div>
 
                     <div id="list_function">
-                        {{-- <div class="card">
-                            <div class="card-header" id="search_box_header" data-toggle="collapse" data-target="#test1" aria-expanded="true" aria-controls="search_box">
-                                <b> CARIAN</b>
+                        @forelse (json_decode($flow->all_id)??[] as $detail )
+                        @php
+                        $file = File::find($detail->file_id);
+                        if ($detail->file_type=='View'){
+                            $function = M_function::where('file_ID',$detail->file_id)->first();
+                        }else{
+                            $function = M_function::find($detail->function_id);
+                        }
+                        @endphp
+                        <div class="card">
+                            <div class="card-header" id="search_box_header" data-toggle="collapse" data-target="{{'#cust-'.$detail->function_id.$detail->file_id}}" aria-expanded="true" aria-controls="search_box">
+                                @if ($detail->file_type=='View')
+                                <b>{{'File :'.$file->file_name}}</b>
+                                @else
+                                <b>{{'File :'.$file->file_name.' | Function:'.$function->function_name}}</b>
+                                @endif
                             </div>
-                            <div id="test1" class="collapse" aria-labelledby="search_box_header" data-parent="">
+                            <div id="{{'cust-'.$detail->function_id.$detail->file_id}}" class="collapse" aria-labelledby="search_box_header" data-parent="">
                                 <div class="card-body">
                                     <pre>
-                                        public function assign_project_form($project_id)
-                                        {
-                                            //
-                                            $data['user'] = User::all();
-                                            $data['project_id']= $project_id;
-                                            // dd($data);
-                                            return view('project.assign_project',$data);
-                                        }
+                                        {{$function->source_code}}
                                     </pre>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
+                        @empty
+                            
+                        @endforelse
 
                     </div>
 
-                    <div class="row flow_input" style="width: 100%" >
+                    <div class="row flow_input" style="width: 100%; {{$show==1?'display: none;':''}}" >
 
                         <div style="margin-right: 5%; text-align:center;">
                             <label for="">File</label>
@@ -111,7 +124,7 @@
 
         </div>
 
-            <button {{$show??""==1?"hidden":""}} type="submit" class="btn {{$edit??""==1?'btn-warning':'btn-info'}} btn-sm" style="min-width: 100%;" >{{$edit??""==1?"Edit":"Submit"}}</button>
+            <button {{$show??""==1?"hidden":""}} type="submit" class="btn {{$edit??""==1?'btn-warning':'btn-info'}} btn-sm buttonsaveajax2" style="min-width: 100%;" >{{$edit??""==1?"Edit":"Submit"}}</button>
 
 
     </form>
@@ -191,6 +204,10 @@
 
                         var main_body = $('<div>').attr('class','collapse').attr('id','cust-'+customid).attr('aria-labelledby','search_box_header').attr('data-parent','');
                         var body = $('<div>').attr('class','card-body').append($('<pre>').text(data.data_function.source_code));
+                        var input_file_id = $('<input>').attr('name','file_id[]').attr('type','hidden').attr('value',file_id);
+                        var input_function_id = $('<input>').attr('name','function_id[]').attr('type','hidden').attr('value',function_id);
+                        var input_file_type = $('<input>').attr('name','file_type[]').attr('type','hidden').attr('value',file_type);
+                        body.append(input_file_id, input_function_id, input_file_type);
                         main_body.append(body);
                         card.append(header, main_body);
                         $('#list_function').append(card);

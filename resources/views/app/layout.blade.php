@@ -16,10 +16,8 @@
     <link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-  <!-- jQuery -->
-  <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="{{ asset('AdminLTE-3.2.0/plugins/jquery/jquery.min.js') }}"></script> 
   <!-- DataTables  & Plugins -->
   <script src="{{asset('asset/plugins/datatables/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('asset/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
@@ -79,8 +77,6 @@
 
 
 
-    <!-- jQuery -->
-    <script src="{{ asset('AdminLTE-3.2.0/plugins/jquery/jquery.min.js') }}"></script> 
     <!-- Bootstrap 4 -->
     <script src="{{ asset('AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- SweetAlert2 -->

@@ -113,22 +113,20 @@ class FlowController extends Controller
     public function store(Request $request)
     {
         // dd($request->file_name);
-        $all_id = array();
-        foreach ($request->file_name as $item) {
-           $file = explode(':',$item);
-           if($file[0] == 'file'){
-            $all_id[] = array('type' => 'file', 'id' => $file[1]);
-           }elseif ($file[0] == 'function') {
-            $all_id[] = array('type' => 'function', 'id' => $file[1]);
-           }
-        }
 
-        $all_idj = json_encode($all_id);
+        $dataencode = array();
+        for ($y = 0; $y < count($request->file_id); $y++) {
+            $dataencode[$y]['file_id'] = $request->file_id[$y];
+            $dataencode[$y]['function_id'] = $request->function_id[$y];
+            $dataencode[$y]['file_type'] = $request->file_type[$y];
+        }
+        $json = json_encode($dataencode);
+
         // dd($all_id);
         Flow::insert([
             'flow_name' => $request->flow_name,
             'flow_description' => $request->flow_description,
-            'all_id' => $all_idj,
+            'all_id' => $json,
             'modul_id' => $request->modul_id,
             'user_id_owner' => auth()->user()->userID
         ]);
@@ -168,7 +166,7 @@ class FlowController extends Controller
         $d['model'] = File::where(['file_type'=>'model', 'projectID'=>$project_id])->get();
         $d['helper'] = File::where(['file_type'=>'helper', 'projectID'=>$project_id])->get();
         // dd($t);
-        return view('flow.form', $d);
+        return view('flow.form2', $d);
     }
 
     /**
