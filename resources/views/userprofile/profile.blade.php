@@ -179,7 +179,7 @@
             })
             .then(function(token) {
                 console.log(token);
-                // alert(token);
+                alert(token);
                 // $.ajaxSetup({
                 //     headers: {
                 //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
