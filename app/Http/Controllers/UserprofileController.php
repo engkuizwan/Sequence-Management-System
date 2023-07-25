@@ -223,7 +223,12 @@ class UserprofileController extends Controller
         // dd($request->all());
         $userid = auth()->user()->userID;
         try{
-            User::where('userID',$userid)->update(['device_token'=>$request->new_token]);
+            $all_token = json_decode(auth()->user()->all_token)??[];
+            if(! in_array($request->new_token,$all_token??[])){
+                // dd('masuk');
+                array_push($all_token,$request->new_token);
+                User::where('userID',$userid)->update(['all_token'=>json_encode($all_token)]);
+            }
             return redirect(route('profile'))->withSuccess('Device Token Registred');
         }catch(\Throwable $th){
             dd($th);
@@ -233,7 +238,7 @@ class UserprofileController extends Controller
 
     public function sendNotification(Request $request)
     {
-        $firebaseToken = User::find(auth()->user()->userID)->device_token;
+        $firebaseToken = User::find(auth()->user()->userID)->all_token;
         // $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
         // dd($firebaseToken);
         $title = $request->notification_title??'Notification Testing';
@@ -241,7 +246,8 @@ class UserprofileController extends Controller
         $SERVER_API_KEY = 'AAAA8Xl2TBM:APA91bGO31QIbfoOXYEWi8ShRhQCYzlCyWHn52Jv87iRSfAASpzMZTIWW0L5lbc2s0jS1HLW70Lvwi0TG6V2QPinfLLEKaNhdWJ3dgvjGvwxGbT5qnoNAJM_dhkwM8_aArUD1rDy4TSj';
 
         $data = [
-            "to" => $firebaseToken,
+            "registration_ids" =>$firebaseToken,
+            // "to" => $firebaseToken,
             "notification" => [
                 "title" => $title,
                 "body" => $body,
