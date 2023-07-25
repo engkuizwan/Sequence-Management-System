@@ -297,7 +297,7 @@ class FunctionController extends Controller
     {
         $user = User::find($user_id);
         // dd($user);
-        $firebaseToken = User::find($user_id)->device_token;;
+        $firebaseToken = json_decode(User::find(auth()->user()->userID)->all_token) ;
         // $firebaseToken2 = array(0=>($user->device_token));
         // dd($firebaseToken);
         // $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
@@ -305,7 +305,7 @@ class FunctionController extends Controller
         $SERVER_API_KEY = 'AAAA8Xl2TBM:APA91bGO31QIbfoOXYEWi8ShRhQCYzlCyWHn52Jv87iRSfAASpzMZTIWW0L5lbc2s0jS1HLW70Lvwi0TG6V2QPinfLLEKaNhdWJ3dgvjGvwxGbT5qnoNAJM_dhkwM8_aArUD1rDy4TSj';
 
         $data = [
-            "to" => $firebaseToken,
+            "registration_ids" =>$firebaseToken,
             "notification" => [
                 "title" => $title,
                 "body" => $body,

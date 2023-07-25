@@ -11,6 +11,8 @@ use App\Models\userprofile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use function Spatie\Ignition\ErrorPage\jsonEncode;
+
 class UserprofileController extends Controller
 {
     /**
@@ -238,8 +240,11 @@ class UserprofileController extends Controller
 
     public function sendNotification(Request $request)
     {
-        $firebaseToken = User::find(auth()->user()->userID)->all_token;
-        // $firebaseToken = User::whereNotNull('device_token')->pluck('device_token')->all();
+        $firebaseToken = json_decode(User::find(auth()->user()->userID)->all_token) ;
+        // $firebaseToken2 = ["f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr", "fIpzTcLjhxxi_FM-bqlXGp:APA91bEXGJgziAZmeS3a5UO862--Ia8Jf259v8fxU9Pz4SoSUDcIOxZTytfBtK5qxDXOkivaUWpTRHRFrPvyNRP626IoIxuVbr4zq6yUep5YnxlU61frgWx-HGbBx9bNi6GlD3dBiD0z"];
+        // $all_array = array($firebaseToken, $firebaseToken2);
+        // dd($all_array);
+        // $firebaseToken = {"0"} "['f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr']";
         // dd($firebaseToken);
         $title = $request->notification_title??'Notification Testing';
         $body = $request->notification_body??'Successfully Send!';
@@ -274,7 +279,7 @@ class UserprofileController extends Controller
 
         $response = curl_exec($ch);
 
-        // dd($response);
+        dd($response);
         // return redirect(route('profile'));
     }
 
