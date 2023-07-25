@@ -163,10 +163,14 @@
     firebase.initializeApp(firebaseConfig);
     
     const messaging = firebase.messaging();
+    let reg = null;
     
     navigator.serviceWorker.register('./firebase-messaging-sw.js')
     .then((registration) => {
         messaging.useServiceWorker(registration);
+
+        reg = registration;
+        // console.log(reg);
     });
 
     messaging.onMessage(function(payload) {
@@ -175,7 +179,8 @@
             body: payload.notification.body,
             icon: payload.notification.icon,
         };
-        new  Notification(noteTitle, noteOptions);
+        // new  Notification(noteTitle, noteOptions);
+        reg.showNotification(noteTitle, noteOptions);
     });
     // var dt = document.getElementById("device_token");
     function initFirebaseMessagingRegistration() {
