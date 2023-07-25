@@ -147,7 +147,8 @@
 
 @section('script')
 <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+{{-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
 <script>
      var firebaseConfig = {
     apiKey: "AIzaSyBbigY7kCCqmeAFRlSd61gKAbSK3ZLrfh8",
@@ -168,7 +169,7 @@
             body: payload.notification.body,
             icon: payload.notification.icon,
         };
-        new Notification(noteTitle, noteOptions);
+        new  Notification(noteTitle, noteOptions);
     });
     // var dt = document.getElementById("device_token");
     function initFirebaseMessagingRegistration() {
@@ -208,7 +209,7 @@
 
 
             }).catch(function (err) {
-                // console.log('User Chat Token Error'+ err);
+                console.log('User Chat Token Error'+ err);
             });
      }
 
