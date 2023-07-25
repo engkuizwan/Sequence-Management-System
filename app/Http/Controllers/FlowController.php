@@ -180,6 +180,7 @@ class FlowController extends Controller
          // dd($id);
          $d['edit'] = 1;
          $d['flow'] = $flow = Flow::find($id);
+         $d['flow_id'] = $id;
         $test = json_decode($flow->all_id);
         //  dd($test);
         //  foreach($test as $item ){
@@ -197,7 +198,7 @@ class FlowController extends Controller
          $d['model'] = File::where(['file_type'=>'model', 'projectID'=>$project_id])->get();
          $d['helper'] = File::where(['file_type'=>'helper', 'projectID'=>$project_id])->get();
          // dd($t);
-         return view('flow.form', $d);
+         return view('flow.form2', $d);
     }
 
     /**
@@ -207,9 +208,30 @@ class FlowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // dd($request->all());
+
+        $dataencode = array();
+        for ($y = 0; $y < count($request->file_id); $y++) {
+            $dataencode[$y]['file_id'] = $request->file_id[$y];
+            $dataencode[$y]['function_id'] = $request->function_id[$y];
+            $dataencode[$y]['file_type'] = $request->file_type[$y];
+        }
+        $json = json_encode($dataencode);
+
+        Flow::where('flow_id', $request->flow_id)->update([
+            'flow_name' => $request->flow_name,
+            'flow_description' => $request->flow_description,
+            'all_id' => $json,
+            'modul_id' => $request->modul_id,
+            // 'user_id_owner' => auth()->user()->userID
+        ]);
+        
+
+        $d['modul_id'] = $request->modul_id;
+
+        return redirect(route('flowindex', [encrypt($request->modul_id),encrypt($request->e_project_id)]))->withSuccess('Flow Created');
     }
 
     /**

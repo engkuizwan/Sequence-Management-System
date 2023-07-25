@@ -20,14 +20,15 @@ use App\Models\M_function;
 
 
 
-    <form action="{{ $edit??""==1?route('flow.update', $modul->modul_id??""):route('flow.store')}}" id="flow_add" method="post">
+    <form action="{{ $edit??""==1?route('flow_update'):route('flow.store')}}" id="flow_add" method="post">
         {{-- <form> --}}
             <input type="hidden" name='modul_id' id="modul_id" value="{{$modul_id??''}}">
             <input type="hidden" name='e_project_id' id="e_project_id" value="{{$e_project_id??''}}">
+            <input type="hidden" name='flow_id' id="flow_id" value="{{$flow_id??''}}">
         @csrf
-        @if ($edit??""==1)
+        {{-- @if ($edit??""==1)
             @method('put')
-        @endif
+        @endif --}}
         <div style="margin : 10px;">
             <div id=list-flow>
 
@@ -54,9 +55,11 @@ use App\Models\M_function;
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div id="list_function">
-                        @forelse (json_decode($flow->all_id)??[] as $detail )
+                        @php
+                            $array = json_decode($flow->all_id??'')??[];
+                        @endphp
+                    <div id="list_function" >
+                        @forelse (json_decode($flow->all_id??'')??[] as $detail )
                         @php
                         $file = File::find($detail->file_id);
                         if ($detail->file_type=='View'){
@@ -65,29 +68,55 @@ use App\Models\M_function;
                             $function = M_function::find($detail->function_id);
                         }
                         @endphp
-                        <div class="card">
-                            <div class="card-header" id="search_box_header" data-toggle="collapse" data-target="{{'#cust-'.$detail->function_id.$detail->file_id}}" aria-expanded="true" aria-controls="search_box">
-                                @if ($detail->file_type=='View')
-                                <b>{{'File :'.$file->file_name}}</b>
-                                @else
-                                <b>{{'File :'.$file->file_name.' | Function:'.$function->function_name}}</b>
-                                @endif
-                            </div>
-                            <div id="{{'cust-'.$detail->function_id.$detail->file_id}}" class="collapse" aria-labelledby="search_box_header" data-parent="">
-                                <div class="card-body">
-                                    <pre>
-                                        {{$function->source_code}}
-                                    </pre>
+                        <div class="main-card">
+                            <div class="card">
+                                <div class="card-header" id="search_box_header" data-toggle="collapse" data-target="{{'#cust-'.$detail->function_id.$detail->file_id}}" aria-expanded="true" aria-controls="search_box">
+                                    <div class="row">
+                                        @if ($detail->file_type=='View')
+                                        <b>{{'File :'.$file->file_name}}</b>
+                                        @else
+                                        <b>{{'File :'.$file->file_name.' | Function:'.$function->function_name}}</b>
+                                        @endif      
+                                        <div style="margin-left: 10px;" >
+                                            <a class="remove_flow" target="_blank"><i class="fas fa-trash" style="color: red"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="{{'cust-'.$detail->function_id.$detail->file_id}}" class="collapse" aria-labelledby="search_box_header" data-parent="">
+                                    <div class="card-body">
+                                        <div class="card" style="min-width: 10%;"> 
+                                            <div class="card-header" id="search_box_header" data-toggle="collapse" data-target="{{'#var-'.$detail->function_id.$detail->file_id}}" aria-expanded="true" aria-controls="search_box">
+                                                test
+                                            </div>
+                                            <div id="{{'var-'.$detail->function_id.$detail->file_id}}" class="collapse" aria-labelledby="search_box_header" data-parent="">
+                                                <div class="card-body">
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name='file_id[]' id="file_id" value="{{$detail->file_id??''}}">
+                                            <input type="hidden" name='function_id[]' id="function_id" value="{{$detail->function_id??''}}">
+                                            <input type="hidden" name='file_type[]' id="file_type" value="{{$detail->file_type??''}}">
+                                        </div>
+                                        <pre>
+                                            {{$function->source_code}}
+                                        </pre>
+                                    </div>
                                 </div>
                             </div>
+                            @if ( end($array) != $detail)
+                                <div style="text-align: center; width:100%;" >
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                            @endif
                         </div>
                         @empty
                             
                         @endforelse
 
+                        
+
                     </div>
 
-                    <div class="row flow_input" style="width: 100%; {{$show==1?'display: none;':''}}" >
+                    <div class="row flow_input" style="width: 100%; {{$show??''==1?'display: none;':''}}" >
 
                         <div style="margin-right: 5%; text-align:center;">
                             <label for="">File</label>
@@ -124,7 +153,7 @@ use App\Models\M_function;
 
         </div>
 
-            <button {{$show??""==1?"hidden":""}} type="submit" class="btn {{$edit??""==1?'btn-warning':'btn-info'}} btn-sm buttonsaveajax2" style="min-width: 100%;" >{{$edit??""==1?"Edit":"Submit"}}</button>
+            <button {{$show??""==1?"hidden":""}} type="submit" class="btn {{$edit??""==1?'btn-warning':'btn-info'}} btn-sm buttonsaveajax" style="min-width: 100%;" >{{$edit??""==1?"Edit":"Submit"}}</button>
 
 
     </form>
@@ -173,7 +202,7 @@ use App\Models\M_function;
             }
         });
 
-        
+        let count_arrow =0;
         $('#add_flow').on('click', function() {
             var file_selected_data = JSON.parse($('#file_selected').val());
             var file_id = file_selected_data[0];
@@ -194,27 +223,48 @@ use App\Models\M_function;
 
                     success: function(data) {
                         customid = data.data_function.functionID + data.data_function.file_ID;
+                        var main_card = $('<div>').attr('class','main-card');
                         var card = $('<div>').attr('class','card');
+                        
                             
+                        var header = $('<div>').attr('class','card-header').attr('id','search_box_header').attr('data-toggle','collapse').attr('data-target','#cust-'+customid).attr('aria-expanded','true').attr('aria-controls','search_box');
+                        var row_header = $('<div>').attr('class','row');
                         if(file_type != 'View'){
-                            var header = $('<div>').attr('class','card-header').attr('id','search_box_header').attr('data-toggle','collapse').attr('data-target','#cust-'+customid).attr('aria-expanded','true').attr('aria-controls','search_box').append($('<b>').text('File :'+data.data_function.file_name +' | Function :'+data.data_function.function_name));
+                                var text = $('<b>').text('File :'+data.data_function.file_name +' | Function :'+data.data_function.function_name);
                         }else{
-                            var header = $('<div>').attr('class','card-header').attr('id','search_box_header').attr('data-toggle','collapse').attr('data-target','#cust-'+customid).attr('aria-expanded','true').attr('aria-controls','search_box').append($('<b>').text('File :'+data.data_function.file_name));
+                                var text = $('<b>').text('File :'+data.data_function.file_name);
                         }
+                        var button_remove = $('<div>').attr('style','margin-left: 10px;').append($('<a>').attr('class','remove_flow').attr('target','_blank').append($('<i>').attr('class','fas fa-trash').attr('style','color: red;')));
+                        row_header.append(text,button_remove);
+                        header.append(row_header)
 
                         var main_body = $('<div>').attr('class','collapse').attr('id','cust-'+customid).attr('aria-labelledby','search_box_header').attr('data-parent','');
                         var body = $('<div>').attr('class','card-body').append($('<pre>').text(data.data_function.source_code));
                         var input_file_id = $('<input>').attr('name','file_id[]').attr('type','hidden').attr('value',file_id);
                         var input_function_id = $('<input>').attr('name','function_id[]').attr('type','hidden').attr('value',function_id);
                         var input_file_type = $('<input>').attr('name','file_type[]').attr('type','hidden').attr('value',file_type);
+                        var arrow = $('<div>').attr('style','text-align: center; width:100%;').append($('<i>').attr('class','fas fa-arrow-down'));
                         body.append(input_file_id, input_function_id, input_file_type);
                         main_body.append(body);
                         card.append(header, main_body);
-                        $('#list_function').append(card);
+                        if(count_arrow != 0){
+                            // alert('2');
+                            main_card.append(arrow,card);
+                        }else{
+                            // alert('1');
+                            main_card.append(card);
+                            count_arrow += 1;
+                        }
+                        $('#list_function').append(main_card);
 
 
                     }
                 });
+        });
+
+        $('.remove_flow').on('click', function() {
+            alert();
+            $(this).closest('.main-card').remove();
         });
     })
 

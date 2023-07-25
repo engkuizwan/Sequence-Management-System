@@ -87,6 +87,7 @@ Route::middleware(['auth'])->group(function(){
         Route::get('flowindex/{modul_id},{project_id}', [FlowController::class, 'index'])->name('flowindex');
         Route::get('/flow_senarai/{modul_id}/{flow_name}/{flow_owner}', [FlowController::class, 'read']);
         Route::get('flow_create/{modul_id}', [FlowController::class, 'create'])->name('flow_create');
+        Route::post('/flow_update', [FlowController::class, 'update'])->name('flow_update');
         Route::get('/flow_show/{flow_id}', [FlowController::class, 'show']);
         Route::get('/flow_edit/{flow_id}', [FlowController::class, 'edit']);
         Route::resource('flow', FlowController::class);

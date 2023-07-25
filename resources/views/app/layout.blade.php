@@ -98,12 +98,12 @@
 
 
     
+@include('modal')
+@include('asset.flash-message')
 {{-- Custom Js --}}
 <script src="{{ asset('asset/js/custom.js') }}" type="text/javascript" charset="utf-8"></script>
 @yield('script')
 
-@include('modal')
-@include('asset.flash-message')
 
 
 
