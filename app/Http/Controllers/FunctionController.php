@@ -211,10 +211,16 @@ class FunctionController extends Controller
                 // 'file_ID'=>$request->file,
             ];
             $sql = M_Function::where('functionID',$function)->update($data);
-            $user =  User::find(auth()->user()->userID);
-            $title = 'Function Changed!';
-            $body = $user->user_name.' just now update your function';
-            $this->sendNotification($request->user, $title, $body);
+            
+            //****************send_notification*************** */
+            $func_detail= M_Function::getview($file_id);
+            // dd(auth()->user()->userID,$func_detail->userID);
+            if(auth()->user()->userID != $func_detail->userID){
+                $user =  User::find(auth()->user()->userID);
+                $title = 'Function Changed!';
+                $body = $user->user_name.' just now update your function';
+                $this->sendNotification($request->user, $title, $body);
+            }
             return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
             // return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
         }catch(\Throwable $th){
@@ -257,6 +263,7 @@ class FunctionController extends Controller
 
             //****************send_notification*************** */
             $func_detail= M_Function::getview($file_id);
+            // dd(auth()->user()->userID,$func_detail->userID);
             if(auth()->user()->userID != $func_detail->userID){
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
