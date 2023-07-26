@@ -339,7 +339,7 @@ class FunctionController extends Controller
 
         $response = curl_exec($ch);
 
-        // dd($response);
+        dd($response);
         // return redirect(route('profile'));
     }
 
