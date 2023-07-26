@@ -246,38 +246,42 @@ class UserprofileController extends Controller
         // dd($all_array);
         // $firebaseToken = {"0"} "['f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr']";
         // dd($firebaseToken);
-        $title = $request->notification_title??'Notification Testing';
-        $body = $request->notification_body??'Successfully Send!';
-        $SERVER_API_KEY = 'AAAA8Xl2TBM:APA91bGO31QIbfoOXYEWi8ShRhQCYzlCyWHn52Jv87iRSfAASpzMZTIWW0L5lbc2s0jS1HLW70Lvwi0TG6V2QPinfLLEKaNhdWJ3dgvjGvwxGbT5qnoNAJM_dhkwM8_aArUD1rDy4TSj';
-
-        $data = [
-            "registration_ids" =>$firebaseToken,
-            // "to" => $firebaseToken,
-            "notification" => [
-                "title" => $title,
-                "body" => $body,
-                "content_available" => true,
-                "priority" => "high",
-                "icon"=> asset('images.png')
-            ]
-        ];
-        $dataString = json_encode($data);
-
-        $headers = [
-            'Authorization: key=' . $SERVER_API_KEY,
-            'Content-Type: application/json',
-        ];
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-
-        $response = curl_exec($ch);
+        foreach($firebaseToken as $token){
+            // dd($token);
+            $title = $request->notification_title??'Notification Testing';
+            $body = $request->notification_body??'Successfully Send!';
+            $SERVER_API_KEY = 'AAAA8Xl2TBM:APA91bGO31QIbfoOXYEWi8ShRhQCYzlCyWHn52Jv87iRSfAASpzMZTIWW0L5lbc2s0jS1HLW70Lvwi0TG6V2QPinfLLEKaNhdWJ3dgvjGvwxGbT5qnoNAJM_dhkwM8_aArUD1rDy4TSj';
+    
+            $data = [
+                // "registration_ids" =>$firebaseToken,
+                "to" => $token,
+                "notification" => [
+                    "title" => $title,
+                    "body" => $body,
+                    "content_available" => true,
+                    "priority" => "high",
+                    "icon"=> asset('images.png')
+                ]
+            ];
+            $dataString = json_encode($data);
+    
+            $headers = [
+                'Authorization: key=' . $SERVER_API_KEY,
+                'Content-Type: application/json',
+            ];
+    
+            $ch = curl_init();
+    
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+    
+            $response = curl_exec($ch);
+        }
+       
 
         // dd($response);
         // return redirect(route('profile'));
