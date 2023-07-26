@@ -389,7 +389,7 @@ class FunctionController extends Controller
         }
        
 
-        dd($response);
+        // dd($response);
         // return redirect(route('profile'));
     }
 
