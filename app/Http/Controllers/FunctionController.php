@@ -219,7 +219,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user, $title, $body);
+                $this->sendNotification($request->user);
             }
             return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
             // return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
@@ -268,7 +268,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user, $title, $body);
+                $this->sendNotification($request->user);
             }
 
 
@@ -300,7 +300,7 @@ class FunctionController extends Controller
         }
     }
 
-    public function sendNotification($user_id, $title, $body)
+    public function sendNotification1($user_id, $title, $body)
     {
         $user = User::find($user_id);
         // dd($user);
@@ -338,6 +338,56 @@ class FunctionController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
         $response = curl_exec($ch);
+
+        dd($response);
+        // return redirect(route('profile'));
+    }
+
+    public function sendNotification($user_id)
+    {
+        $user = User::find($user_id);
+        $firebaseToken = json_decode(User::find($user_id)->all_token) ;
+        // $firebaseToken2 = ["f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr", "fIpzTcLjhxxi_FM-bqlXGp:APA91bEXGJgziAZmeS3a5UO862--Ia8Jf259v8fxU9Pz4SoSUDcIOxZTytfBtK5qxDXOkivaUWpTRHRFrPvyNRP626IoIxuVbr4zq6yUep5YnxlU61frgWx-HGbBx9bNi6GlD3dBiD0z"];
+        // $all_array = array($firebaseToken, $firebaseToken2);
+        // dd($all_array);
+        // $firebaseToken = {"0"} "['f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr']";
+        // dd($firebaseToken);
+        foreach($firebaseToken as $token){
+            // dd($token);
+            $title = 'Function Changed!';
+                $body = $user->user_name.' just now update your function';
+            $SERVER_API_KEY = 'AAAA8Xl2TBM:APA91bGO31QIbfoOXYEWi8ShRhQCYzlCyWHn52Jv87iRSfAASpzMZTIWW0L5lbc2s0jS1HLW70Lvwi0TG6V2QPinfLLEKaNhdWJ3dgvjGvwxGbT5qnoNAJM_dhkwM8_aArUD1rDy4TSj';
+    
+            $data = [
+                // "registration_ids" =>$firebaseToken,
+                "to" => $token,
+                "notification" => [
+                    "title" => $title,
+                    "body" => $body,
+                    "content_available" => true,
+                    "priority" => "high",
+                    "icon"=> asset('alert.png')
+                ]
+            ];
+            $dataString = json_encode($data);
+    
+            $headers = [
+                'Authorization: key=' . $SERVER_API_KEY,
+                'Content-Type: application/json',
+            ];
+    
+            $ch = curl_init();
+    
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+    
+            $response = curl_exec($ch);
+        }
+       
 
         dd($response);
         // return redirect(route('profile'));

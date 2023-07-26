@@ -262,8 +262,8 @@ use App\Models\M_function;
                 });
         });
 
-        $('.remove_flow').on('click', function() {
-            alert();
+        $(document).on('click', '.remove_flow', function() {
+            // alert();
             $(this).closest('.main-card').remove();
         });
     })

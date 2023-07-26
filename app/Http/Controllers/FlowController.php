@@ -9,6 +9,7 @@ use App\Models\sidenavbar;
 use App\Models\assetlookup;
 use App\Models\project_user;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
@@ -21,10 +22,16 @@ class FlowController extends Controller
      */
     public function index(Request $request, $emodul_id, $e_projectId)
     {
+        $flow_name = $request->flow_name;
+        $flow_owner = $request->flow_owner;
+
+        // Create a new request instance without 'flow_name' and 'flow_owner'
+        $newRequest = $request->replace($request->except(['flow_name', 'flow_owner']));
+        
         $d['e_project_id']=$e_projectId;
         $d['modul_id'] = decrypt($emodul_id);
-        $d['flow_name']=$request->flow_name;
-        $d['flow_owner']=$request->flow_owner;
+        $d['flow_name']=$flow_name;
+        $d['flow_owner']=$flow_owner;
         $list = array(5,7,8,9,12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         // dd($d['modul_id']);
@@ -36,15 +43,19 @@ class FlowController extends Controller
         // dd($modul_id);
         // dd(session()->pull('flow_name'));
         // if(session('flow_name')==null){
-        //     dd('test');
+            // dd($flow_name);
         // }
 
         // dd(auth()->user()->role->role == 'Admin');
-
-        $d['flow'] = Flow::where('flow.modul_id',$modul_id)
-        ->filter(['flow.flow_name'=>$flow_name,'flow.flow_owner'=>$flow_owner])
-        ->join('user','flow.user_id_owner' ,'=', 'user.userID')
-        ->get();
+                // dd('test');
+                $d['flow'] = Flow::where('flow.modul_id', $modul_id)
+                    ->filter(['flow_name' => $flow_name, 'flow_owner' => $flow_owner])
+                    ->join('user', 'flow.user_id_owner', '=', 'user.userID')
+                    ->get();
+                // ->toSql();
+            
+            // dd('test2');
+        
         // dd($d['flow']);
         $d['modul_id'] = $modul_id;
         $module = Modul::find($modul_id)->get();
@@ -112,7 +123,7 @@ class FlowController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->file_name);
+        // dd($request->file_id);
 
         $dataencode = array();
         for ($y = 0; $y < count($request->file_id); $y++) {
