@@ -1,3 +1,21 @@
+// // Get registration token. Initially this makes a network call, once retrieved
+// // subsequent calls to getToken will return from cache.
+// messaging.getToken({ vapidKey: 'BKoLVbXMo4XwKPN7KC-yjKXILh277OSFUqdmrZ8Kg_lfI0fzEmVoch9OqP3gVgHM1LFYIHVivugtJtnlw9Xh3hs' }).then((currentToken) => {
+//   if (currentToken) {
+//     // Send the token to your server and update the UI if necessary
+//     // ...
+//   } else {
+//     // Show permission request UI
+//     console.log('No registration token available. Request permission to generate one.');
+//     // ...
+//   }
+// }).catch((err) => {
+//   console.log('An error occurred while retrieving token. ', err);
+//   // ...
+// });
+
+
+
 /*
 Give the service worker access to Firebase Messaging.
 Note that you can only use Firebase Messaging here, other Firebase libraries are not available in the service worker.
