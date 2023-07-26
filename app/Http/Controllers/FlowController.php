@@ -25,7 +25,7 @@ class FlowController extends Controller
         $d['modul_id'] = decrypt($emodul_id);
         $d['flow_name']=$request->flow_name;
         $d['flow_owner']=$request->flow_owner;
-        $list = array(1,5,2,3,4);
+        $list = array(5,7,8,9,12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         // dd($d['modul_id']);
 

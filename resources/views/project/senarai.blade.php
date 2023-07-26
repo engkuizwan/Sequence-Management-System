@@ -26,14 +26,14 @@
               <th style="width:20%;">Framework</th>
               <th style="width:20%;">Project Description</th>
               <th style="text-align: center;width:20%;">Status</th>
-              <th style="text-align: center;width:20%;">Action</th>
+              {{-- <th style="text-align: center;width:20%;">Action</th> --}}
             </tr>
         </thead>
         <tbody>
           @forelse ( $model as $project )
             <tr>
                 <td>
-                    <a href="{{ route('modulindex', encrypt($project->projectID)) }}">
+                    <a href="{{ route('project_about', encrypt($project->projectID)) }}">
                       {{ $project->project_name }}
                     </a>
                     <br/>
@@ -57,7 +57,7 @@
                     @endif
                   @endforeach
                 </td>
-                <td class="project-actions text-center">
+                {{-- <td class="project-actions text-center">
 
                   <ul class="list-inline">
                     <li class="list-inline-item">
@@ -86,7 +86,7 @@
                     </li>
                     @endif
                   </ul>
-                </td>
+                </td> --}}
             </tr>
             
             @empty  

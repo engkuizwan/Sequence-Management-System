@@ -23,7 +23,7 @@ class FunctionController extends Controller
         $file = File::where(['file_id' => $file_id])->first();
         // dd($file);
 
-        $list = array(1,5,2,3,4);
+        $list = array(5,7,8,9,12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         // $d['funcName'] = $file->file_name;
         // $d['title'] = "File " . $file->file_name;
@@ -50,7 +50,7 @@ class FunctionController extends Controller
         $d['file'] = File::where(['file_id' => $file_id])->first();
         $d['user'] = User::all()->pluck('name', 'userID');
         // dd($d['user']);
-        $list = array(1);
+        $list = array(12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
 
         return view('function.create', $d);
@@ -151,7 +151,7 @@ class FunctionController extends Controller
         $d['funcDetail'] = M_Function::getFunc($function);
         $d['user'] = User::all()->pluck('name', 'id');
         $d['disabled'] = "disabled";
-        $list = array(1);
+        $list = array(12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
 
         return view('function.detail', $d);
@@ -169,7 +169,7 @@ class FunctionController extends Controller
         $d['e_project_id'] = $e_project_id;
         // dd($d['funcDetail']);
         $d['user'] = User::all()->pluck('name', 'userID');
-        $list = array(1);
+        $list = array(12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
 
         return view('function.edit', $d);

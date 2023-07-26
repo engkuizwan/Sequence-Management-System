@@ -12,6 +12,6 @@ class M_project extends Model
     protected $table = 'project';
     protected $primaryKey = 'projectID';
     protected $fillable = [
-        'project_name','project_framework','project_description','status'
+        'project_name','project_framework','project_description','status','client_company','project_leader'
     ];
 }

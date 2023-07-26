@@ -27,7 +27,7 @@ class ModulController extends Controller
         // ->where('project.projectID', '=', $projectId)
         // ->paginate(3);
         // dd($d['members']);
-        $list = array(1,5,2,3,4);
+        $list = array(5,7,8,9,12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         // dd($d['list_navbar']);
         

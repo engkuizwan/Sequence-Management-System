@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function(){
 
         // ****************************************************  U S E R  P R O F I L E ************************************************
         Route::resource('/userprofile', UserprofileController::class);
+        Route::get('/user_remove/{user}', [UserprofileController::class, 'destroy'])->name('user_remove');
         Route::post('/update_user/{user_id}', [UserprofileController::class, 'update_user'])->name('update_user');
         Route::get('/update_status/{user_id}', [UserprofileController::class, 'update_status'])->name('update_status');
         Route::get('/profile', [UserprofileController::class, 'profile'])->name('profile');
@@ -57,12 +58,15 @@ Route::middleware(['auth'])->group(function(){
         // Route::get('/read', [ProjectController::class, 'read']);
         Route::post('/project_add', [ProjectController::class, 'store'])->name('projectstore');
         Route::post('/remove_member', [ProjectController::class, 'remove_member'])->name('remove_member');
+        Route::post('/remove_member2', [ProjectController::class, 'remove_member2'])->name('remove_member2');
 
         Route::prefix('project') ->group(function(){
             Route::match(['post','get', 'head'],'/list', [ProjectController::class, 'index'])->name('project.admin');
             Route::get('/list/{user_id}', [ProjectController::class, 'indexuser'])->name('project.user');
             Route::get('/member-list/{project_id}', [ProjectController::class, 'list_member'])->name('project.list_member');
         });
+        Route::get('/project_about/{project_id}', [ProjectController::class, 'project_about'])->name('project_about');
+        Route::get('/update_project_status/{project_id}', [ProjectController::class, 'update_project_status'])->name('update_project_status');
 
         // Route::middleware(['auth','user-role:1'])->group(function(){
         // });
@@ -71,11 +75,15 @@ Route::middleware(['auth'])->group(function(){
         Route::resource('newproject', ProjectController::class);
         Route::get('/project_list', [ProjectController::class, 'read']);
         Route::get('/project_show/{projectid}', [ProjectController::class, 'show']);
+        Route::get('/project_edit_all/{projectid}', [ProjectController::class, 'edit_all']);
         Route::get('/project_view/{projectid}', [ProjectController::class, 'view']);
         Route::post('/project_update/{projectid}', [ProjectController::class, 'update']);
+        Route::post('/project_update_all/{projectid}', [ProjectController::class, 'update_all']);
         Route::get('/project_list/{user_id}', [ProjectController::class, 'readuser']);
         Route::get('/assign_project_form/{project_id}', [ProjectController::class, 'assign_project_form'])->name('assign_project_form');
         Route::post('/assign_member_action}', [ProjectController::class, 'assign_member_action'])->name('assign_member_action');
+        Route::get('/assign_project_form2/{project_id}', [ProjectController::class, 'assign_project_form2'])->name('assign_project_form2');
+        Route::post('/assign_member_action2}', [ProjectController::class, 'assign_member_action2'])->name('assign_member_action2');
 
         // **************************************************** M O  D  U  L  S ************************************************
         Route::get('modulindex/{projectId}', [ModulController::class, 'index'])->name('modulindex');

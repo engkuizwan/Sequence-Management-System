@@ -23,7 +23,7 @@ class FileController extends Controller
         ->orderby('file.created_at','ASC')
         ->paginate(5);
         // dd($d['file']);
-        $list = array(1,5,2,3,4);
+        $list = array(5,7,8,9,12);
         $d['list_navbar'] = sidenavbar::whereIn('sidenavbar_id',$list)->get();
         return view('file.senarai',$d);
     }

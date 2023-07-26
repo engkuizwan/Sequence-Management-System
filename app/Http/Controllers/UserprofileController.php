@@ -41,7 +41,7 @@ class UserprofileController extends Controller
         $data['role'] = Role::all();
         $data['user'] = $user->user_role();
         // dd($data['user']);
-        $data['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
+        $data['list_navbar'] = sidenavbar::where('sidenavbar_id','=','12')->get();
          return view('userprofile.create',$data);
     }
 
@@ -101,7 +101,7 @@ class UserprofileController extends Controller
         $d['project'] = User::find($user_id)->project($user_id);
         // $d['role'] = User::find($user_id)->role1($user_id);
         // dd($d['project']);
-        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
+        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','12')->get();
         return view('userprofile.profile', $d);
     }
 /**
@@ -118,7 +118,7 @@ class UserprofileController extends Controller
         $d['project'] = User::find($user_id)->project($user_id);
         $d['role'] = User::find($user_id)->role1($user_id);
         dd($d['role']);
-        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
+        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','12')->get();
         return view('userprofile.profile', $d);
     }
 
@@ -131,7 +131,7 @@ class UserprofileController extends Controller
         $d['role'] = User::find($user_id)->role1($user_id);
         $d['all_role'] = Role::all();
         // dd($d['role']);
-        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','1')->get();
+        $d['list_navbar'] = sidenavbar::where('sidenavbar_id','=','12')->get();
         return view('userprofile.profile_view_admin', $d);
     }
 
@@ -289,8 +289,16 @@ class UserprofileController extends Controller
      * @param  \App\Models\userprofile  $userprofile
      * @return \Illuminate\Http\Response
      */
-    public function destroy(userprofile $userprofile)
+    public function destroy($userprofile)
     {
-        //
+        // dd($userprofile);
+        try{
+
+            User::destroy($userprofile);
+            return redirect(route('userprofile.create'))->withSuccess('User Successfully Removed');
+
+        }catch(\Throwable $th){
+            dd($th);
+        }
     }
 }

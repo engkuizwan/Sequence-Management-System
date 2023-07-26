@@ -90,13 +90,14 @@
                     <a href="" class="mr-1 mb-1 btn btn-sm btn-info">
                       <i class="fas fa-pencil-alt"></i>
                   </a> --}}
-                        @csrf
-                        @method('delete')
+                    <form action="{{route('user_remove',$item->userID)}}">
+                        {{-- @csrf --}}
+                        {{-- @method('delete') --}}
                         {{-- <input type="hidden" name='project_id' value="{{$item->projectID}}"> --}}
-                        <a href="" class="mr-1 mb-1 btn btn-sm btn-danger">
+                        <button type="susmit" class="mr-1 mb-1 btn btn-sm btn-danger">
                           <i class="fas fa-trash"></i>
-                      </a>
-                      {{-- </form> --}}
+                      </button>
+                    </form>
                   </td>
 
             </tr>

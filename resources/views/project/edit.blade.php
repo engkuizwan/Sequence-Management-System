@@ -92,6 +92,34 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
+
+            <div class="form-group">
+              <label for="">Client Company</label>
+              <input {{$show??"" == 1? 'readonly':''}} type="text" name="client_company" value="{{  $project->client_company??""?$project->client_company:old('client_company' ?? '') }}" 
+              class="form-control @error('client_company') is-invalid @enderror" placeholder="Client Company" id='client_company'>
+              @error('client_company')
+                  <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+          </div>
+
+          <div class="form-group">
+            <label for="">Project Leader</label>
+            <select class="form-control"  name="project_leader" id="project_leader">
+              <option selected>Please Choose</option>
+              @foreach ($user as $u )
+              <option {{$project->project_leader == $u->userID?'selected':''}} value="{{$u->userID}}" >{{$u->name}}</option>
+              @endforeach
+            </select>
+            {{-- <input {{$show??"" == 1? 'readonly':''}} type="text" name="project_leader" value="{{  $project->project_leader??""?$project->project_leader:old('project_leader' ?? '') }}" 
+            class="form-control @error('project_leader') is-invalid @enderror" placeholder="Project Leader" id='project_leader'> --}}
+            @error('project_leader')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+
+
+
             @if ($show != 1)
             <a type="button" class="btn btn-warning " onclick="update({{$project->projectID}})">Edit</a>
             @endif
@@ -120,15 +148,19 @@
           var project_name = $("#project_name").val();
           var project_description = $("#project_description").val();
           var project_framework = $("#project_framework").val(); 
+          var client_company = $("#client_company").val(); 
+          var project_leader = $("#project_leader").val(); 
           // submit the form using AJAX
           $.ajax({
             type: "post",
-            url: "{{ url('project_update') }}/" + id,
+            url: "{{ url('project_update_all') }}/" + id,
             data: {
                 "_token": "{{ csrf_token() }}",
                 "project_name" : project_name,
                 "project_framework" : project_framework,
-                "project_description" : project_description
+                "project_description" : project_description,
+                "client_company" : client_company,
+                "project_leader" : project_leader
             },
             success: function(response) {
               // show the success message
@@ -142,8 +174,9 @@
               setTimeout(function() {
                 // location.reload();
                 $(".btn-close").click();
-                read();
-                read();
+                location.reload();
+                // read();
+                // read();
               }, 2000);
             },
             error: function(xhr) {

@@ -27,7 +27,9 @@ class User extends Authenticatable
         'user_email',
         'user_password',
         'user_name',
-        'role_id'
+        'role_id',
+        'device_token',
+        'all_token'
     ];
 
     /**
