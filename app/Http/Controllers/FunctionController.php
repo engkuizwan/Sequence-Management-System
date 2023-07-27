@@ -219,7 +219,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user, $title, $body);
+                $this->sendNotification($request->user);
             }
             return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
             // return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
@@ -268,7 +268,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user, $title, $body);
+                $this->sendNotification($request->user);
             }
 
 
@@ -300,10 +300,10 @@ class FunctionController extends Controller
         }
     }
 
-    public function sendNotification($user_id, $title, $body)
+    public function sendNotification1($user_id, $title, $body)
     {
         $user = User::find($user_id);
-        // dd($user);
+        // dd($user);auth()->user()->userID
         $firebaseToken = json_decode(User::find(auth()->user()->userID)->all_token) ;
         // $firebaseToken2 = array(0=>($user->device_token));
         // dd($firebaseToken);
@@ -349,9 +349,9 @@ class FunctionController extends Controller
         // return redirect(route('profile'));
     }
 
-    public function sendNotification1($user_id)
+    public function sendNotification($user_id)
     {
-        $user = User::find($user_id);
+        $user = User::find(auth()->user()->userID);
         $firebaseToken = json_decode(User::find($user_id)->all_token) ;
         // $firebaseToken2 = ["f4UYoTlnJv8MIql_pbmDIW:APA91bG3_q7-VaCNn_TkvpZim91tZEYxiqcmIg-lZ4hhMTjxIdsDoB7-_d6H8FrpghCIpQ4t1R2mQbVpTk3Waa4mtdG5xMQ5-oA6mfgrENM6JvxLDF94iNWN9zI2TLyUZt2EbJcloCLr", "fIpzTcLjhxxi_FM-bqlXGp:APA91bEXGJgziAZmeS3a5UO862--Ia8Jf259v8fxU9Pz4SoSUDcIOxZTytfBtK5qxDXOkivaUWpTRHRFrPvyNRP626IoIxuVbr4zq6yUep5YnxlU61frgWx-HGbBx9bNi6GlD3dBiD0z"];
         // $all_array = array($firebaseToken, $firebaseToken2);
