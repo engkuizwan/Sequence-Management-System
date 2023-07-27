@@ -96,9 +96,9 @@
             @endforelse
         </tbody>
     </table>
-    <div class="d-flex justify-content-end mt-2">
+    {{-- <div class="d-flex justify-content-end mt-2">
       {{ $model->links() }}
-  </div>
+  </div> --}}
   </div>
   <!-- /.card-body -->
 </div>

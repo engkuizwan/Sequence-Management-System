@@ -54,13 +54,17 @@ class ProjectController extends Controller
     
 
     public function read(User $user){
+
+
         
-        $role =auth()->user()->role;
+        $role =auth()->user()->role->role;
+        // dd($role);
         if($role == 'Admin'){
-            $data['model'] = User::all()->withoutTrashed()->paginate(5);
+            $data['model'] = M_project::all();
         }else{
             $data['model'] = $user->project(auth()->user()->userID);
         }
+        // dd($data['model']);
         $data['project_status'] = assetlookup::where('category','project_status')->get();
         // dd($data);
         return view('project.senarai', $data);
