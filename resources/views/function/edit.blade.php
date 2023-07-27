@@ -55,7 +55,7 @@
             icon: payload.notification.icon,
         };
         // new  Notification(noteTitle, noteOptions);
-        // reg.showNotification(noteTitle, noteOptions);
+        reg.showNotification(noteTitle, noteOptions);
     });
     // var dt = document.getElementById("device_token");
     function initFirebaseMessagingRegistration() {
