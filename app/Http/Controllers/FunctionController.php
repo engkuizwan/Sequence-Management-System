@@ -219,7 +219,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user);
+                $this->sendNotification($request->user, $title, $body);
             }
             return redirect(route('functionindex', ['fileId' => encrypt($file_id), 'e_project_id' => $request->e_project_id]))->withSucces('Function updated');
             // return redirect(route('functionindex', encrypt($file_id)))->withSuccess('Function updated');
@@ -268,7 +268,7 @@ class FunctionController extends Controller
                 $user =  User::find(auth()->user()->userID);
                 $title = 'Function Changed!';
                 $body = $user->user_name.' just now update your function';
-                $this->sendNotification($request->user);
+                $this->sendNotification($request->user, $title, $body);
             }
 
 
@@ -300,7 +300,7 @@ class FunctionController extends Controller
         }
     }
 
-    public function sendNotification1($user_id, $title, $body)
+    public function sendNotification($user_id, $title, $body)
     {
         $user = User::find($user_id);
         // dd($user);
@@ -339,11 +339,11 @@ class FunctionController extends Controller
 
         $response = curl_exec($ch);
 
-        dd($response);
+        // dd($response);
         // return redirect(route('profile'));
     }
 
-    public function sendNotification($user_id)
+    public function sendNotification1($user_id)
     {
         $user = User::find($user_id);
         $firebaseToken = json_decode(User::find($user_id)->all_token) ;
